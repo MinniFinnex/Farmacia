@@ -49,6 +49,8 @@ def devolver(id):
         # Eliminar original
         cursor.execute("UPDATE productos SET eliminado = 1 WHERE id = %s", (id,))
 
+        conn.commit()  # Confirmamos primero antes del INSERT que dispara el trigger
+
         # Reinsertar producto con misma info, fecha futura
         cursor.execute("""
             INSERT INTO productos (nombre, lote, cantidad, fecha_caducidad, precio, eliminado)
@@ -61,9 +63,11 @@ def devolver(id):
             producto['precio']
         ))
 
-    conn.commit()
+        conn.commit()
+
     conn.close()
     return redirect('/medicamentos')
+
 
 @app.route('/logs_devoluciones')
 def logs_devoluciones():
