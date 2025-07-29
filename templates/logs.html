@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Logs de Devoluciones</title>
+</head>
+<body>
+    <h1>Historial de Devoluciones al Proveedor</h1>
+    <table border="1">
+        <tr>
+            <th>Nombre</th>
+            <th>Lote</th>
+            <th>Cantidad</th>
+            <th>Fecha Caducidad</th>
+            <th>Fecha Devolución</th>
+            <th>Fecha Esperada de Reingreso</th>
+            <th>Motivo</th>
+        </tr>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.nombre }}</td>
+            <td>{{ log.lote }}</td>
+            <td>{{ log.cantidad }}</td>
+            <td>{{ log.fecha_caducidad }}</td>
+            <td>{{ log.fecha_devolucion }}</td>
+            <td>{{ log.fecha_reingreso_esperada }}</td>
+            <td>{{ log.motivo }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="{{ url_for('index') }}">Volver al menú</a>
+</body>
+</html>

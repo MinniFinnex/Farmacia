@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Medicamento</title>
+</head>
+<body>
+
+    {% if mensaje %}
+    <p style="color:red;">{{ mensaje }}</p>
+{% endif %}
+
+
+    <h1>Registrar Medicamento</h1>
+    <form action="{{ url_for('registrar') }}" method="POST">
+        <label>Nombre:</label>
+        <input type="text" name="nombre" autocomplete="off" required><br><br>
+
+        <label>Lote:</label>
+        <input type="text" name="lote" min="9999999" max="999999" autocomplete="off" required><br><br>
+
+        <label>Cantidad:</label>
+        <input type="number" name="cantidad" max="99" autocomplete="off" required><br><br>
+
+        <label>Fecha de Caducidad:</label>
+        <input type="date" name="fecha_caducidad" autocomplete="off" required><br><br>
+
+        <label>Precio ($):</label>
+        <input type="number" name="precio" step="0.01" max="99999" autocomplete="off" required><br><br>
+
+        <button type="submit">Registrar</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('index') }}">Volver</a>
+</body>
+</html>

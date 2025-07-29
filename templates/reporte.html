@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte de Vencidos</title>
+</head>
+<body>
+    <h1>Medicamentos Vencidos</h1>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Lote</th>
+            <th>Cantidad</th>
+            <th>Fecha de Caducidad</th>
+            <th>Precio</th>
+        </tr>
+        {% for p in vencidos %}
+        <tr style="background-color: red; color: white;">
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.lote }}</td>
+            <td>{{ p.cantidad }}</td>
+            <td>{{ p.fecha_caducidad }}</td>
+            <td>${{ p.precio }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Total perdido por vencimiento: $-{{ total }}</h3>
+    <br>
+    <form action="{{ url_for('vaciar_reporte') }}" method="post" onsubmit="return confirm('¿Estás seguro de vaciar el reporte? Esto eliminará todos los vencidos.')">
+    <button type="submit">🗑 Vaciar reporte</button>
+</form>
+
+    <a href="{{ url_for('index') }}">Volver</a>
+    <a href="{{ url_for('eliminados') }}">Elimiados</a>
+    <a href="{{ url_for('logs_devoluciones') }}">Ver logs de devoluciones</a>
+</body>
+</html>

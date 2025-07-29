@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio - Cruz Roja</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Sistema de gestión de <span>VitalFarma</span></h1>
+    <img src="{{ url_for('static', filename='image.png') }}" alt="img">
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('medicamentos') }}">Medicamentos Registrados</a></li>
+            <li><a href="{{ url_for('registrar') }}"> Registrar Nuevo Medicamento</a></li>
+            <li><a href="{{ url_for('eliminados') }}"> Historial de Eliminados</a></li>
+            <li><a href="{{ url_for('reporte') }}"> Reporte de Vencimientos</a></li>
+            <li><a href="{{ url_for('logs_devoluciones') }}"> Ver logs de devoluciones</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

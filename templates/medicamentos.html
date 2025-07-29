@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Medicamentos Registrados</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Medicamentos Registrados</h1>
+
+    <nav>
+        <a href="{{ url_for('index') }}"> Menú principal</a> |
+        <a href="{{ url_for('registrar') }}"> Registrar nuevo producto</a> |
+        <a href="{{ url_for('eliminados') }}">Historial de eliminados</a> |
+        <a href="{{ url_for('reporte') }}"> Ver reporte vencidos</a>
+    </nav>
+
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Lote</th>
+            <th>Cantidad</th>
+            <th>Fecha de Caducidad</th>
+            <th>Precio</th>
+            <th>Alerta</th>
+            <th>Eliminar</th>
+        </tr>
+        {% for p in productos %}
+        <tr>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.lote }}</td>
+            <td>{{ p.cantidad }}</td>
+            <td>{{ p.fecha_caducidad }}</td>
+            <td>
+                {% if p.promocion_activa %}
+                    <del>${{ p.precio }}</del>
+                    <strong style="color: green">${{ p.precio_promocion }}</strong>
+                {% else %}
+                    ${{ p.precio }}
+                {% endif %}
+            </td>
+            <td style="background-color:
+                {% if (p.fecha_caducidad - now.date()).days <= 0 %}red
+                {% elif (p.fecha_caducidad - now.date()).days <= 7 %}orange
+                {% elif (p.fecha_caducidad - now.date()).days <= 30 %}yellow
+                {% else %}white
+                {% endif %};
+                color: {% if (p.fecha_caducidad - now.date()).days <= 0 %}white{% endif %};
+            ">
+                {% if (p.fecha_caducidad - now.date()).days <= 0 %}
+                    🔴 Vencido
+                {% elif (p.fecha_caducidad - now.date()).days <= 7 %}
+                    🟠 Pronto a vencer
+                {% elif (p.fecha_caducidad - now.date()).days <= 30 %}
+                    🟡 Cerca de vencer
+                {% else %}
+                    ✅
+                {% endif %}
+            </td>
+            <td><a href="{{ url_for('eliminar', id=p.id) }}">🗑 Eliminar</a></td>
+        </tr>
+
+        <td>
+    <a href="{{ url_for('eliminar', id=p.id) }}">🗑 Eliminar</a> |
+    <a href="{{ url_for('devolver', id=p.id) }}">🔁 Devolver al proveedor</a>
+</td>
+
+
+        {% endfor %}
+    </table>
+    
+</body>
+</html>
