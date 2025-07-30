@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash
 from datetime import datetime, date, timedelta
 import pymysql
 
@@ -7,67 +7,34 @@ app = Flask(__name__)
 def conectar_db():
     return pymysql.connect(host='localhost', user='root', db='cruz_roja', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 
-@app.route('/devolver/<int:id>')
-def devolver(id):
-    conn = conectar_db()
-    cursor = conn.cursor()
+@app.route('/devolver', methods=['POST'])
+def devolver():
+    producto_id = request.form.get('producto_id')
+    nuevo_lote = request.form.get('nuevo_lote')
+    nueva_fecha_caducidad = request.form.get('nueva_fecha_caducidad')
+    nuevo_precio = request.form.get('nuevo_precio')
 
-    cursor.execute("SELECT * FROM productos WHERE id = %s", (id,))
-    producto = cursor.fetchone()
+    if not producto_id:
+        return "Error: faltó el ID del producto", 400
 
-    if producto:
-        hoy = date.today()
-        reingreso = hoy + timedelta(days=3)
-
-        # Historial de eliminados
+    conexion = conectar_db()
+    with conexion.cursor() as cursor:
         cursor.execute("""
-            INSERT INTO historial_eliminados (nombre, lote, cantidad, fecha_caducidad, motivo, fecha_eliminacion)
-            VALUES (%s, %s, %s, %s, %s, %s)
-        """, (
-            producto['nombre'],
-            producto['lote'],
-            producto['cantidad'],
-            producto['fecha_caducidad'],
-            'Devuelto al proveedor',
-            hoy
-        ))
+            INSERT INTO devoluciones (producto_id, nuevo_lote, nueva_fecha_caducidad, nuevo_precio)
+            VALUES (%s, %s, %s, %s)
+        """, (producto_id, nuevo_lote, nueva_fecha_caducidad, nuevo_precio))
 
-        # Log de devolución
         cursor.execute("""
-            INSERT INTO logs_devoluciones (nombre, lote, cantidad, fecha_caducidad, fecha_devolucion, fecha_reingreso_esperada, motivo)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """, (
-            producto['nombre'],
-            producto['lote'],
-            producto['cantidad'],
-            producto['fecha_caducidad'],
-            hoy,
-            reingreso,
-            'Devuelto por vencimiento o defecto'
-        ))
+            UPDATE productos
+            SET lote = %s, fecha_caducidad = %s, precio = %s
+            WHERE id = %s
+        """, (nuevo_lote, nueva_fecha_caducidad, nuevo_precio, producto_id))
 
-        # Eliminar original
-        cursor.execute("UPDATE productos SET eliminado = 1 WHERE id = %s", (id,))
-
-        conn.commit()  # Confirmamos primero antes del INSERT que dispara el trigger
-
-        # Reinsertar producto con misma info, fecha futura
-        cursor.execute("""
-            INSERT INTO productos (nombre, lote, cantidad, fecha_caducidad, precio, eliminado)
-            VALUES (%s, %s, %s, %s, %s, 0)
-        """, (
-            producto['nombre'],
-            producto['lote'],
-            producto['cantidad'],
-            producto['fecha_caducidad'],
-            producto['precio']
-        ))
-
-        conn.commit()
-
-    conn.close()
-    return redirect('/medicamentos')
-
+        conexion.commit()
+    conexion.close()
+    
+    flash("Producto devuelto y actualizado correctamente.")
+    return redirect('medicamentos')
 
 @app.route('/logs_devoluciones')
 def logs_devoluciones():
@@ -96,13 +63,19 @@ def vaciar_reporte():
     conn = conectar_db()
     cursor = conn.cursor()
 
-    # Elimina de productos vencidos
-    cursor.execute("DELETE FROM productos WHERE fecha_caducidad <= %s AND eliminado = 0", (date.today(),))
+    cursor.execute("SELECT id FROM productos WHERE fecha_caducidad <= %s", (date.today(),))
+    productos = cursor.fetchall()
+
+    for producto in productos:
+        try:
+            cursor.execute("DELETE FROM productos WHERE id = %s", (producto['id'],))
+        except:
+            conn.rollback()
+            continue
 
     conn.commit()
     conn.close()
     return redirect('/reporte')
-
 
 @app.route('/medicamentos')
 def medicamentos():
@@ -227,7 +200,7 @@ def registrar():
 
         conn.commit()
         conn.close()
-        return redirect('/registro')
+        return redirect('/registrar')
     return render_template('registrar.html')
 
 

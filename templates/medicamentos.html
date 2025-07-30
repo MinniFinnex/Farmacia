@@ -54,20 +54,20 @@
                 {% elif (p.fecha_caducidad - now.date()).days <= 30 %}
                     🟡 Cerca de vencer
                 {% else %}
-                    ✅
+                    
                 {% endif %}
             </td>
-            <td><a href="{{ url_for('eliminar', id=p.id) }}">🗑 Eliminar</a></td>
+            <td><a href="{{ url_for('eliminar', id=p.id) }}"> Eliminar</a></td>
         </tr>
 
         <td>
-    <a href="{{ url_for('eliminar', id=p.id) }}">🗑 Eliminar</a> |
-    <a href="{{ url_for('devolver', id=p.id) }}">🔁 Devolver al proveedor</a>
+    <a href="{{ url_for('devolver') }}"> Devolver al proveedor</a>
 </td>
 
 
         {% endfor %}
     </table>
     
+    <a href="{{ url_for('index') }}">Volver</a>
 </body>
 </html>

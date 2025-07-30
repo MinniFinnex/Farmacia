@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Reporte de Vencidos</title>
 </head>
 <body>
@@ -27,9 +28,6 @@
 
     <h3>Total perdido por vencimiento: $-{{ total }}</h3>
     <br>
-    <form action="{{ url_for('vaciar_reporte') }}" method="post" onsubmit="return confirm('¿Estás seguro de vaciar el reporte? Esto eliminará todos los vencidos.')">
-    <button type="submit">🗑 Vaciar reporte</button>
-</form>
 
     <a href="{{ url_for('index') }}">Volver</a>
     <a href="{{ url_for('eliminados') }}">Elimiados</a>

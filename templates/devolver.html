@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Devolver Producto</title>
+</head>
+<body>
+    <h2>Devolución de Producto</h2>
+    <form action="{{ url_for('devolver_producto') }}" method="POST">
+        <input type="hidden" name="producto_id" value="{{ producto.id }}">
+
+        <label for="nuevo_lote">Nuevo lote:</label>
+        <input type="text" name="nuevo_lote" required><br><br>
+
+        <label for="nueva_fecha_caducidad">Nueva fecha de caducidad:</label>
+        <input type="date" name="nueva_fecha_caducidad" required><br><br>
+
+        <label for="nuevo_precio">Nuevo precio:</label>
+        <input type="number" name="nuevo_precio" step="0.01" min="0" required><br><br>
+
+        <button type="submit">Actualizar y Devolver</button>
+    </form>
+</body>
+</html>
