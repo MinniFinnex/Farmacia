@@ -8,13 +8,6 @@
 <body>
     <h1>Medicamentos Registrados</h1>
 
-    <nav>
-        <a href="{{ url_for('index') }}"> Menú principal</a> |
-        <a href="{{ url_for('registrar') }}"> Registrar nuevo producto</a> |
-        <a href="{{ url_for('eliminados') }}">Historial de eliminados</a> |
-        <a href="{{ url_for('reporte') }}"> Ver reporte vencidos</a>
-    </nav>
-
     <table>
         <tr>
             <th>Nombre</th>
@@ -39,35 +32,51 @@
                     ${{ p.precio }}
                 {% endif %}
             </td>
-            <td style="background-color:
-                {% if (p.fecha_caducidad - now.date()).days <= 0 %}red
-                {% elif (p.fecha_caducidad - now.date()).days <= 7 %}orange
-                {% elif (p.fecha_caducidad - now.date()).days <= 30 %}yellow
-                {% else %}white
-                {% endif %};
-                color: {% if (p.fecha_caducidad - now.date()).days <= 0 %}white{% endif %};
-            ">
-                {% if (p.fecha_caducidad - now.date()).days <= 0 %}
-                    🔴 Vencido
-                {% elif (p.fecha_caducidad - now.date()).days <= 7 %}
-                    🟠 Pronto a vencer
-                {% elif (p.fecha_caducidad - now.date()).days <= 30 %}
-                    🟡 Cerca de vencer
-                {% else %}
-                    
-                {% endif %}
-            </td>
+            <td style="
+    {% if not p.fecha_caducidad %}
+        background-color: #d4edda; color: #155724;
+    {% else %}
+        {% set dias = (p.fecha_caducidad - now.date()).days %}
+        {% if dias <= 0 %}
+            background-color: red; color: white;
+        {% elif dias <= 7 %}
+            background-color: orange; color: black;
+        {% elif dias <= 30 %}
+            background-color: yellow; color: black;
+        {% else %}
+            background-color: #d4edda; color: #155724;
+        {% endif %}
+    {% endif %}
+">
+    {% if not p.fecha_caducidad %}
+        Sin vencer
+    {% else %}
+        {% if dias <= 0 %}
+            🔴 Vencido
+        {% elif dias <= 7 %}
+            🟠 Pronto a vencer
+        {% elif dias <= 30 %}
+            🟡 Cerca de vencer
+        {% else %}
+            🟢 Sin vencer
+        {% endif %}
+    {% endif %}
+</td>
+
             <td><a href="{{ url_for('eliminar', id=p.id) }}"> Eliminar</a></td>
         </tr>
-
-        <td>
-    <a href="{{ url_for('devolver') }}"> Devolver al proveedor</a>
+         <td>
+    <form action="{{ url_for('devolver_producto') }}" method="POST" style="display:inline;">
+        <input type="hidden" name="producto_id" value="{{ p.id }}">
+        <button type="submit" class="btn btn-devolver">Devolver al proveedor</button>
+    </form>
+</td>
 </td>
 
 
         {% endfor %}
     </table>
     
-    <a href="{{ url_for('index') }}">Volver</a>
+    <a class="Index" href="{{ url_for('index') }}">Volver</a>
 </body>
 </html>

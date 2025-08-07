@@ -3,11 +3,13 @@ from datetime import datetime, date, timedelta
 import pymysql
 
 app = Flask(__name__)
+app.secret_key = 'JairickDiceCUADROOOOOOOOyEQUIPOOOOOOOOOOOOO'
+
 
 def conectar_db():
     return pymysql.connect(host='localhost', user='root', db='cruz_roja', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 
-@app.route('/devolver', methods=['POST'])
+@app.route('/devolver_producto', methods=['POST', 'GET'])
 def devolver():
     producto_id = request.form.get('producto_id')
     nuevo_lote = request.form.get('nuevo_lote')
@@ -34,7 +36,7 @@ def devolver():
     conexion.close()
     
     flash("Producto devuelto y actualizado correctamente.")
-    return redirect('medicamentos')
+    return redirect('medicamentos' )
 
 @app.route('/logs_devoluciones')
 def logs_devoluciones():
@@ -98,10 +100,20 @@ def generar_alertas():
 
     for p in productos:
         fecha_caducidad = p['fecha_caducidad']
-        dias_restantes = (fecha_caducidad - hoy).days
+
+        # Validar que la fecha exista
+        if fecha_caducidad is None:
+            continue  # saltar este producto
+
+        try:
+            dias_restantes = (fecha_caducidad - hoy).days
+        except Exception as e:
+            print(f"Error con producto ID {p['id']}: {e}")
+            continue
+
         alerta = None
         promocion = None
-        precio_base = p['precio']
+        precio_base = float(p['precio']) if p['precio'] is not None else 0
         nuevo_precio = None
 
         # Detección de alertas
@@ -119,10 +131,6 @@ def generar_alertas():
             promocion = 0.25
         elif 0 <= dias_restantes <= 7:
             promocion = 0.50
-
-        precio_base = float(p['precio'])
-    
-
 
         # Registrar alerta si no existe aún
         if alerta:

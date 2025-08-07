@@ -6,16 +6,24 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Sistema de gestión de <span>VitalFarma</span></h1>
-    <img src="{{ url_for('static', filename='image.png') }}" alt="img">
     <nav>
         <ul>
             <li><a href="{{ url_for('medicamentos') }}">Medicamentos Registrados</a></li>
-            <li><a href="{{ url_for('registrar') }}"> Registrar Nuevo Medicamento</a></li>
-            <li><a href="{{ url_for('eliminados') }}"> Historial de Eliminados</a></li>
-            <li><a href="{{ url_for('reporte') }}"> Reporte de Vencimientos</a></li>
-            <li><a href="{{ url_for('logs_devoluciones') }}"> Ver logs de devoluciones</a></li>
+            <li><a href="{{ url_for('registrar') }}"> Registrar Medicamento</a></li>
+            <li><a href="{{ url_for('eliminados') }}"> Historial Eliminados</a></li>
+            <li><a href="{{ url_for('reporte') }}"> Reporte Vencimientos</a></li>
+            <li><a href="{{ url_for('logs_devoluciones') }}">Logs Devoluciones</a></li>
         </ul>
     </nav>
+    <div class="Index">  
+        <header class="Title">
+            <h1>Sistema de gestión de <span>VitalFarma</span></h1>
+        </header>
+        <img src="{{ url_for('static', filename='image.png') }}" alt="img">
+            <p>¡Bienvenido a la página de inicio de la aplicación!</p>
+            <p>En esta página, encontrarás información sobre los medicamentos registrados, la posibilidad de registrar nuevos medicamentos, el historial de medicamentos eliminados, el reporte de vencimientos, y la posibilidad de ver los logs de devoluciones.</p>
+            <p>Si tienes alguna pregunta o necesitas ayuda, no dudes en contactar con nosotros.</p>
+            <p>¡Esperamos que disfrutes de esta aplicación!</p>
+    </div>
 </body>
 </html>

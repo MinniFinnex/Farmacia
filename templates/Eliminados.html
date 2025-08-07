@@ -28,7 +28,7 @@
         {% endfor %}
     </table>
     <br>
-    <a href="{{ url_for('index') }}">Volver</a>
+    <a class="Index" href="{{ url_for('index') }}">Volver</a>
     <form action="{{ url_for('borrar_historial') }}" method="post" onsubmit="return confirm('¿Deseas borrar todo el historial? Esta acción no se puede deshacer.')">
     <button type="submit"> Borrar historial</button>
 </form>
