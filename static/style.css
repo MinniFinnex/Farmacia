@@ -167,8 +167,14 @@ form select {
 p{
     color: var(--negro);
     margin: 15px;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 400;
+    width: 900px;
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    text-align: left;
 }
 
 button,
