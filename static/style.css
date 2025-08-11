@@ -155,6 +155,7 @@ form select {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     margin-bottom: 20px;
+    justify-content: center;
 }
 
 .index h2 {
@@ -204,7 +205,6 @@ nav {
     align-items: center;
     padding: 10px 20px;
     margin-bottom: 20px;
-    border-radius: 0 0 10px 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -239,6 +239,12 @@ a {
 
 a.docs-creator{
     font-size: 22px;
+    text-decoration: none;
+}
+
+a.docs-creator:hover{
+    font-size: 22px;
+    text-decoration: none;
 }
 
 a.Index.docs-creator{
@@ -263,10 +269,7 @@ a.Form.docs-creator:hover{
 
 
 a.Index.docs-creator:hover{
-    background-color: #003f5c;
     transform: scale(1.03);
-
-
     font-weight: bold;
     text-decoration: none;
     text-decoration: none;
