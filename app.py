@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, flash
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 import pymysql
 
 app = Flask(__name__)
