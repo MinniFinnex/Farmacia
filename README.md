@@ -1,11 +1,11 @@
 # Farmacia
-nh bnh
 
-Flask
-PyMySQL
+## Tecnologya Utilizada
+-  Flask
+- PyMySQL
 
-Base de datos: Cruz_roja
-
-Comando de instalación:
+## Instalación de Dependencias
+```bash
 pip install -r .\requirements.txt
 
+** Este sistema esta pensado en una problemática **

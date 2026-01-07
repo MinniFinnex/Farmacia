@@ -71,7 +71,7 @@ def vaciar_reporte():
     for producto in productos:
         try:
             cursor.execute("DELETE FROM productos WHERE id = %s", (producto['id'],))
-        except:
+        except Exception as productos:
             conn.rollback()
             continue
 
